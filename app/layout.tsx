@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NEWSLETTER",
-  description: "Newsletter.auth",
+  title: "Secure.BT",
+  description: "BT.auth",
 };
 
 export default function RootLayout({
