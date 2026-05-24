@@ -141,7 +141,7 @@ export default function LoginScreen() {
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-white font-sans selection:bg-[#5500a5]/20">
       
-      {/* LEFT PANE - Desktop Only */}
+     
       <div className="hidden md:flex md:w-1/2 bg-[#f3f4f6] items-center justify-center border-r border-gray-100 select-none">
         {/* Large BT Circle Logo */}
         <div className="w-[136px] h-[136px] rounded-full border-[5px] border-[#5500a5] bg-white flex items-center justify-center shadow-sm transition-transform duration-300 hover:scale-105">
