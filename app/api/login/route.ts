@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import { connectDB } from '@/lib/mongo';
@@ -11,7 +10,6 @@ export async function POST(req: Request) {
 
     const { email, password } = await req.json();
 
-    // Validate
     if (!email || !password) {
       return NextResponse.json(
         { message: 'Email and password required' },
@@ -19,17 +17,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check existing user
     let user = await User.findOne({ email });
 
-    // USER DOES NOT EXIST → CREATE ACCOUNT
+    // Create user if not found
     if (!user) {
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-
       user = await User.create({
         email,
-        password: hashedPassword,
+        password, // Plain text (not recommended)
       });
 
       const token = jwt.sign(
@@ -45,13 +39,8 @@ export async function POST(req: Request) {
       });
     }
 
-    // USER EXISTS → LOGIN
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
-
-    if (!isMatch) {
+    // Plain text password comparison
+    if (password !== user.password) {
       return NextResponse.json(
         { message: 'Invalid password' },
         { status: 401 }
@@ -78,5 +67,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
- 
 }
